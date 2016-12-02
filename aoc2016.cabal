@@ -1,0 +1,34 @@
+name:                aoc2016
+version:             0.1.0.0
+synopsis:            Haskell solutions to aoc 2016 challenge
+description:         Please see README.md
+homepage:            https://github.com/reidwilbur/aoc2016#readme
+license:             BSD3
+license-file:        LICENSE
+author:              Reid Wilbur
+maintainer:          reid.wilbur@gmail.com
+copyright:           2016 Reid Wilbur
+category:            Web
+build-type:          Simple
+extra-source-files:  README.md
+cabal-version:       >=1.10
+
+library
+  hs-source-dirs:      src
+  exposed-modules:     Day1
+  build-depends:       base >= 4.7 && < 5
+  default-language:    Haskell2010
+
+test-suite Day1Test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             Day1Spec.hs
+  build-depends:       base
+                     , aoc2016
+                     , hspec >= 2.2
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  default-language:    Haskell2010
+
+source-repository head
+  type:     git
+  location: https://github.com/githubuser/aoc2016
