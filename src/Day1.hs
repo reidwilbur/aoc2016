@@ -1,15 +1,27 @@
-module Day1 (getHqDist, parseInput, parseStep, PathStep(R,L)) where
+module Day1 (
+  getFirstCoordVisitedTwice,
+  getCoordDist,
+  getHqDist,
+  parseInput,
+  parseStep,
+  getPath,
+  PathStep(R,L),
+  Direction(N,E,S,W)) where
 
 import Data.List.Split as Split
 import Data.List as List
+import Data.Set as Set
+import Data.Maybe
 
 data PathStep = R Int
               | L Int
-              deriving (Eq, Ord, Show)
+              deriving (Eq, Show)
 
-data Direction = N | S | E | W deriving (Eq, Ord, Show)
+data Direction = N | E | S | W deriving (Eq, Enum, Show)
 
-type Position = (Direction, (Int, Int))
+type Coord = (Int, Int)
+
+type Position = (Direction, Coord)
 
 parseStep :: String -> PathStep
 parseStep s = case s of
@@ -21,18 +33,45 @@ parseInput :: String -> [PathStep]
 parseInput "" = []
 parseInput ss = List.map parseStep $ Split.splitOn ", " ss
 
-getNextPos :: Position -> PathStep -> Position
-getNextPos (N, (x, y)) (R i) = (E, (x + i, y))
-getNextPos (N, (x, y)) (L i) = (W, (x - i, y))
-getNextPos (E, (x, y)) (R i) = (S, (x, y - i))
-getNextPos (E, (x, y)) (L i) = (N, (x, y + i))
-getNextPos (S, (x, y)) (R i) = (W, (x - i, y))
-getNextPos (S, (x, y)) (L i) = (E, (x + i, y))
-getNextPos (W, (x, y)) (R i) = (N, (x, y + i))
-getNextPos (W, (x, y)) (L i) = (S, (x, y - i))
+getDist :: PathStep -> Int
+getDist (R i) = i
+getDist (L i) = i
 
-getHqDist :: String -> Int
+turn :: Direction -> PathStep -> Direction
+turn W (R _) = N
+turn N (L _) = W
+turn d (R _) = succ d
+turn d (L _) = pred d
+
+advance :: Coord -> Direction -> Int -> Coord
+advance (x, y) N i = (x,     y + i)
+advance (x, y) S i = (x,     y - i)
+advance (x, y) E i = (x + i, y    )
+advance (x, y) W i = (x - i, y    )
+
+walkPath :: Position -> PathStep -> [Position]
+walkPath (dir, coord) step =
+  let newdir = turn dir step
+      dist = getDist step
+   in reverse $ List.map (\crd -> (newdir, crd)) $ List.map (advance coord newdir) $ [1..dist]
+
+getHqDist :: [PathStep] -> Int
 getHqDist [] = 0
-getHqDist ss = let (d, (fx, fy)) = List.foldl getNextPos (N, (0,0)) $ parseInput ss
-                in (abs fx) + (abs fy)
+getHqDist pss = let (_, coord) = last $ getPath [(N, (0,0))] pss
+                 in getCoordDist coord
 
+getPath :: [Position] -> [PathStep] -> [Position]
+getPath [] _ = error "Must have initial position in position list"
+getPath pstns [] = reverse pstns
+getPath pstns (ps:pss) = let newpstns = walkPath (head pstns) ps
+                          in getPath (newpstns ++ pstns) pss
+
+getFirstCoordVisitedTwice :: [Position] -> Set Coord -> Maybe Coord
+getFirstCoordVisitedTwice [] _ = Nothing
+getFirstCoordVisitedTwice ((_, coord):pstns) visited =
+  if Set.member coord visited
+     then Just coord
+     else getFirstCoordVisitedTwice pstns (Set.insert coord visited)
+
+getCoordDist :: Coord -> Int
+getCoordDist (x, y) = (abs x) + (abs y)
