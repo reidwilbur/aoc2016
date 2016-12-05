@@ -2,13 +2,14 @@ module Main where
 
 import Test.Hspec
 import Day4
+import Data.List (isInfixOf)
 
 spec :: Spec
 spec = do
   describe "Day4" $ do
     context "parseRoom" $ do
       it "should return correct room" $ do
-        parseRoom "fubrjhqlf-edvnhw-dftxlvlwlrq-803[wjvzd]" `shouldBe` Room {name="fubrjhqlfedvnhwdftxlvlwlrq", sector=803, cksum="wjvzd"}
+        parseRoom "fubrjhqlf-edvnhw-dftxlvlwlrq-803[wjvzd]" `shouldBe` Room {name="fubrjhqlf-edvnhw-dftxlvlwlrq", sector=803, cksum="wjvzd"}
 
     context "genCksum" $ do
       it "should return correct cksum" $ do
@@ -35,6 +36,21 @@ spec = do
 
       it "should generate correct sum for day4Input" $ do
         getSectorSum (getValidRooms (map parseRoom day4Input)) `shouldBe` 173787
+
+    context "shiftChar" $ do
+      it "should return the correct char" $ do
+        decryptChar 27 'c' `shouldBe` 'd'
+
+      it "should return the correct char" $ do
+        decryptChar (27+(26*100)) 'c' `shouldBe` 'd'
+
+    context "decryptRoom" $ do
+      it "should return the correct room" $ do
+        decryptRoom (parseRoom "qzmt-zixmtkozy-ivhz-343[asdf]") `shouldBe` Room "very encrypted name" 343 "asdf"
+
+      it "should return decrypted rooms for day4Input" $ do
+        let rooms = getValidRooms $ map parseRoom day4Input
+         in (map (sector) $ filter (\r -> isInfixOf "pole" (name r)) $ map (decryptRoom) rooms) `shouldBe` [548]
 
 main :: IO ()
 main = hspec spec
