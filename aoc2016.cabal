@@ -13,6 +13,13 @@ build-type:          Simple
 extra-source-files:  README.md
 cabal-version:       >=1.10
 
+Executable             Day5
+  build-depends:       base >= 4.7 && < 5
+                     , aoc2016
+  main-is:             Main.hs
+  hs-source-dirs:      app
+  default-language:    Haskell2010
+
 library
   hs-source-dirs:      src
   exposed-modules:     Day1, Day2, Day3, Day4, Day5
@@ -20,7 +27,8 @@ library
                      , split
                      , containers
                      , regex-posix
-                     , MissingH
+                     , cryptohash
+                     , bytestring
   default-language:    Haskell2010
 
 test-suite Day1Test
@@ -74,6 +82,7 @@ test-suite Day5Test
   build-depends:       base
                      , aoc2016
                      , containers
+                     , bytestring
                      , hspec >= 2.2
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   default-language:    Haskell2010

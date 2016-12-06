@@ -1,6 +1,7 @@
 module Main where
 
-import Lib
+import Day5
 
 main :: IO ()
-main = someFunc
+main = do
+ putStrLn $ getPasswd' 8 0 "cxdnnyjw"
