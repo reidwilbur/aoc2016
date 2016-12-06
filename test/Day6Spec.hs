@@ -9,10 +9,16 @@ spec = do
   describe "Day6" $ do
     context "decode" $ do
       it "should return correct val for test input" $ do
-        decode day6TestInput `shouldBe` "easter"
+        decode mostCommon day6TestInput `shouldBe` "easter"
 
       it "should return correct val for day 6 input" $ do
-        decode day6Input `shouldBe` "qrqlznrl"
+        decode mostCommon day6Input `shouldBe` "qrqlznrl"
+
+      it "should return correct val for test input least common" $ do
+        decode leastCommon day6TestInput `shouldBe` "advent"
+
+      it "should return correct val for day 6 input least common" $ do
+        decode leastCommon day6Input `shouldBe` "kgzdfaon"
 
 main :: IO ()
 main = hspec spec
