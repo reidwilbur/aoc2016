@@ -5,7 +5,7 @@ import Day3
 
 spec :: Spec
 spec = do
-  describe "Day2" $ do
+  describe "Day3" $ do
     context "isValidTri" $ do
       it "should return false for (5 10 25)" $ do
         isValidTri (5, 10, 25) `shouldBe` False
