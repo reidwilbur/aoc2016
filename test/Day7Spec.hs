@@ -20,6 +20,13 @@ spec = do
       it "should return correct results for day 7 input" $ do
         length (filter (==True) (map (supportsTLS) (map (parseAddress) day7Input))) `shouldBe` 115
 
+    context "supportsSSL" $ do
+      it "should return correct results for test input" $ do
+        map (supportsSSL) (map (parseAddress) day7TestInput2) `shouldBe` [True, False, True, True]
+
+      it "should return correct results for day 7 input" $ do
+        length (filter (==True) (map (supportsSSL) (map (parseAddress) day7Input))) `shouldBe` 231
+
 main :: IO ()
 main = hspec spec
 
@@ -28,6 +35,13 @@ day7TestInput = [
   "abcd[bddb]xyyx",
   "aaaa[qwer]tyui",
   "ioxxoj[asdfgh]zxcvbn"
+  ]
+
+day7TestInput2 = [
+  "aba[bab]xyz",
+  "xyx[xyx]xyx",
+  "aaa[kek]eke",
+  "zazbz[bzb]cdb"
   ]
 
 day7Input = [
