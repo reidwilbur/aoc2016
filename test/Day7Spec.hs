@@ -5,7 +5,7 @@ import Day7
 
 spec :: Spec
 spec = do
-  describe "Day6" $ do
+  describe "Day7" $ do
     context "parseAddres" $ do
       it "should return correct address" $ do
         parseAddress (day7TestInput !! 0) `shouldBe` Address { seqs=["abba", "qrst"], hnets=["mnop"] }

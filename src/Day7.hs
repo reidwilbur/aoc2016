@@ -39,7 +39,7 @@ supportsSSL :: Address -> Bool
 supportsSSL addr =
   let abas = concat $ map (getABAs) $ seqs addr
       hnts = hnets addr
-   in [] /= filter (\hnet -> [] /= (filter (==True) $ map (\aba -> hasBAB aba hnet) abas)) hnts
+   in any (any (==True)) $ map (\hnet -> map (\aba -> hasBAB aba hnet) abas) hnts
 
 supportsTLS :: Address -> Bool
 supportsTLS addr =
