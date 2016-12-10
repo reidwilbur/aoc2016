@@ -3,6 +3,7 @@ module Main where
 import Test.Hspec
 import Day10
 import qualified Data.Map as Map
+import qualified Data.List as List
 
 spec :: Spec
 spec = do
@@ -33,17 +34,24 @@ spec = do
         initState instrs `shouldBe` (bs, os, imap)
 
     context "nextState" $ do
-      it "should return correct next state for test input" $ do
+      it "should return correct final state for test input" $ do
         let initstate = initState $ map parseInstr day10TestInput
             bs = Map.fromList [(0,[3,5]),(1,[2,3]),(2,[5,2])]
             os = Map.fromList [(0,[5]),(1,[2]),(2,[3])]
             imap = Map.empty
         nextState (nextState (nextState initstate)) `shouldBe` (bs, os, imap)
 
-      it "should return correct next state for day 10 input" $ do
+      it "should return correct final state for day 10 input" $ do
         let initstate = initState $ map parseInstr day10Input
             (fbs, fos, _) = runUntil (\(_, _, imap) -> imap == Map.empty) initstate
-        filter (\(k, vals) -> (maximum vals == 61) && (minimum vals == 17)) (Map.toList fbs) `shouldBe` [(98,[17,61])]
+            bot1761 = head $ filter (\(k, vals) -> (maximum vals == 61) && (minimum vals == 17)) $ Map.toList fbs
+        bot1761 `shouldBe` (98,[17,61])
+
+      it "should return correct final output for day 10 input" $ do
+        let initstate = initState $ map parseInstr day10Input
+            (fbs, fos, _) = runUntil (\(_, _, imap) -> imap == Map.empty) initstate
+            prodout012 = List.product $ concat $ (fos Map.! 0):(fos Map.! 1):(fos Map.! 2):[]
+        prodout012 `shouldBe` 4042
 
 main :: IO ()
 main = hspec spec
