@@ -39,11 +39,11 @@ spec = do
             bs = Map.fromList [(0,[3,5]),(1,[2,3]),(2,[5,2])]
             os = Map.fromList [(0,[5]),(1,[2]),(2,[3])]
             imap = Map.empty
-        nextState (nextState (nextState initstate)) `shouldBe` (bs, os, imap)
+        runUntil (\(_,_,imap) -> imap == Map.empty) initstate `shouldBe` (bs, os, imap)
 
       it "should return correct final state for day 10 input" $ do
         let initstate = initState $ map parseInstr day10Input
-            (fbs, fos, _) = runUntil (\(_, _, imap) -> imap == Map.empty) initstate
+            (fbs, fos, _) = runUntil (\(_,_,imap) -> imap == Map.empty) initstate
             bot1761 = head $ filter (\(k, vals) -> (maximum vals == 61) && (minimum vals == 17)) $ Map.toList fbs
         bot1761 `shouldBe` (98,[17,61])
 
